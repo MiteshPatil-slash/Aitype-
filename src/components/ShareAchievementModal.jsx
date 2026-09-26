@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { buildShareUrl } from '../utils/achievementShare.js';
+import { buildShareUrl, getWpmTier } from '../utils/achievementShare.js';
 
 export default function ShareAchievementModal({ isOpen, onClose, stats = {} }) {
   const [copied, setCopied] = useState(false);
@@ -8,6 +8,7 @@ export default function ShareAchievementModal({ isOpen, onClose, stats = {} }) {
 
   const shareUrl = buildShareUrl(stats);
   const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(shareUrl)}`;
+  const tier = getWpmTier(stats.wpm ?? 0);
 
   const handleCopy = async () => {
     try {
@@ -24,14 +25,33 @@ export default function ShareAchievementModal({ isOpen, onClose, stats = {} }) {
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h3>Share Your Achievement</h3>
+          <h3>🔗 Share Your Achievement</h3>
           <button className="modal-close-btn" onClick={onClose}>✕</button>
         </div>
 
         <div className="modal-body" style={{ textAlign: 'center' }}>
+          <span
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 14px',
+              borderRadius: '999px',
+              fontSize: '0.85rem',
+              fontWeight: 600,
+              background: `${tier.color}22`,
+              color: tier.color,
+              border: `1px solid ${tier.color}55`,
+              marginBottom: '12px'
+            }}
+          >
+            <span>{tier.emoji}</span>
+            <span>{tier.label}</span>
+          </span>
+
           <p style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
-            Anyone who scans this code (or opens the link) will see your {stats.wpm ?? 0} WPM
-            result at {stats.accuracy ?? 0}% accuracy.
+            Anyone who scans this code (or opens the link) will see your ⚡ {stats.wpm ?? 0} WPM
+            result at 🎯 {stats.accuracy ?? 0}% accuracy.
           </p>
 
           <img
@@ -65,7 +85,7 @@ export default function ShareAchievementModal({ isOpen, onClose, stats = {} }) {
               }}
             />
             <button className="btn btn-primary btn-sm" onClick={handleCopy}>
-              {copied ? 'Copied!' : 'Copy Link'}
+              {copied ? '✅ Copied!' : '📋 Copy Link'}
             </button>
           </div>
         </div>

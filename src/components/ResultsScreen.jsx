@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Navbar from './Navbar.jsx';
 import ShareAchievementModal from './ShareAchievementModal.jsx';
+import { getWpmTier } from '../utils/achievementShare.js';
 
 export default function ResultsScreen({
   onNavigate,
@@ -48,20 +49,28 @@ export default function ResultsScreen({
   // Headline + message driven entirely by what actually happened this test.
   let heroTitle = 'Great Job!';
   let heroSubtitle = `You typed at ${wpmVal} WPM with ${accuracyVal}% accuracy.`;
+  let heroEmoji = '🎉';
 
   if (typedChars === 0) {
     heroTitle = 'No Input Detected';
     heroSubtitle = "You didn't type anything during this test — give it another go!";
+    heroEmoji = '🤔';
   } else if (accuracyVal < 50) {
     heroTitle = 'Needs Practice';
     heroSubtitle = `Only ${accuracyVal}% accuracy and ${stats.errors ?? 0} errors this round. Slow down and focus on each key.`;
+    heroEmoji = '💪';
   } else if (accuracyVal < 85) {
     heroTitle = 'Good Effort!';
     heroSubtitle = `${wpmVal} WPM at ${accuracyVal}% accuracy — keep practicing to sharpen it up.`;
+    heroEmoji = '👍';
   } else {
     heroTitle = 'Great Job!';
     heroSubtitle = `Excellent run — ${wpmVal} WPM at ${accuracyVal}% accuracy.`;
+    heroEmoji = '🎉';
   }
+
+  // Fun game-like rank based on WPM, shown as a badge chip under the headline.
+  const wpmTier = getWpmTier(wpmVal);
 
   return (
     <div className="screen-wrapper">
@@ -105,8 +114,27 @@ export default function ResultsScreen({
             </svg>
           </div>
           <div className="celebration-text">
-            <h2 className="celebration-title">{heroTitle}</h2>
+            <h2 className="celebration-title">{heroEmoji} {heroTitle}</h2>
             <p className="celebration-subtitle">{heroSubtitle}</p>
+            <span
+              className="wpm-tier-chip"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                marginTop: '10px',
+                padding: '6px 14px',
+                borderRadius: '999px',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                background: `${wpmTier.color}22`,
+                color: wpmTier.color,
+                border: `1px solid ${wpmTier.color}55`
+              }}
+            >
+              <span>{wpmTier.emoji}</span>
+              <span>{wpmTier.label}</span>
+            </span>
           </div>
         </div>
 
@@ -120,7 +148,7 @@ export default function ResultsScreen({
               </svg>
             </div>
             <div className="res-stat-body">
-              <span className="res-stat-label">WPM</span>
+              <span className="res-stat-label">⚡ WPM</span>
               <span className="res-stat-number">{stats.wpm ?? 72}</span>
               <span className="res-stat-hint">Words per minute</span>
             </div>
@@ -135,7 +163,7 @@ export default function ResultsScreen({
               </svg>
             </div>
             <div className="res-stat-body">
-              <span className="res-stat-label">Accuracy</span>
+              <span className="res-stat-label">🎯 Accuracy</span>
               <span className="res-stat-number">{stats.accuracy ?? 97}%</span>
               {diffLabel && (
                 <span className={`res-stat-diff ${accuracyDiff >= 0 ? 'text-success' : 'text-danger'}`}>
@@ -154,7 +182,7 @@ export default function ResultsScreen({
               </svg>
             </div>
             <div className="res-stat-body">
-              <span className="res-stat-label">Errors</span>
+              <span className="res-stat-label">❌ Errors</span>
               <span className="res-stat-number">{stats.errors ?? 4}</span>
               <span className="res-stat-hint">Total mistakes</span>
             </div>
@@ -168,7 +196,7 @@ export default function ResultsScreen({
               </svg>
             </div>
             <div className="res-stat-body">
-              <span className="res-stat-label">Time Taken</span>
+              <span className="res-stat-label">⏱️ Time Taken</span>
               <span className="res-stat-number">{stats.timeTaken ?? 60}s</span>
               <span className="res-stat-hint">Test duration</span>
             </div>
@@ -178,7 +206,7 @@ export default function ResultsScreen({
         {/* Character Breakdown Card */}
         <div className="breakdown-card">
           <div className="breakdown-header">
-            <h4 className="card-heading">Character Breakdown</h4>
+            <h4 className="card-heading">📊 Character Breakdown</h4>
           </div>
 
           <div className="breakdown-body">
@@ -285,7 +313,7 @@ export default function ResultsScreen({
                     <path d="M12 2l1.8 5.6L19 9.5l-5.2 1.9L12 17l-1.8-5.6L5 9.5l5.2-1.9z"/>
                     <path d="M19 15l.7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7z"/>
                   </svg>
-                  <span>Get AI Analysis</span>
+                  <span>Get AI Analysis ✨</span>
                 </>
               )}
             </button>
@@ -311,7 +339,7 @@ export default function ResultsScreen({
               <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
               <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
             </svg>
-            <span>Share Achievement</span>
+            <span>Share Achievement 🔗</span>
           </button>
         </div>
 

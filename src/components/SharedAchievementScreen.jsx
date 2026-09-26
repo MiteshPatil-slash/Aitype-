@@ -1,4 +1,5 @@
 import React from 'react';
+import { getWpmTier } from '../utils/achievementShare.js';
 
 export default function SharedAchievementScreen({ stats, onTryYourself }) {
   if (!stats) {
@@ -27,7 +28,7 @@ export default function SharedAchievementScreen({ stats, onTryYourself }) {
           </div>
           <div className="results-actions-bar">
             <button className="btn btn-primary" onClick={onTryYourself}>
-              <span>Try TypeAI Yourself →</span>
+              <span>🚀 Try TypeAI Yourself</span>
             </button>
           </div>
         </div>
@@ -40,6 +41,7 @@ export default function SharedAchievementScreen({ stats, onTryYourself }) {
   const errors = stats.errors ?? 0;
   const timeTaken = stats.timeTaken ?? 60;
   const difficulty = stats.difficulty || 'Medium';
+  const tier = getWpmTier(wpm);
   const dateStr = stats.date
     ? new Date(stats.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : null;
@@ -83,10 +85,28 @@ export default function SharedAchievementScreen({ stats, onTryYourself }) {
             </svg>
           </div>
           <div className="celebration-text">
-            <h2 className="celebration-title">Shared Typing Achievement</h2>
+            <h2 className="celebration-title">🏅 Shared Typing Achievement</h2>
             <p className="celebration-subtitle">
-              {dateStr ? `Recorded on ${dateStr} — ` : ''}{wpm} WPM at {accuracy}% accuracy on {difficulty} difficulty.
+              {dateStr ? `Recorded on ${dateStr} — ` : ''}⚡ {wpm} WPM at 🎯 {accuracy}% accuracy on {difficulty} difficulty.
             </p>
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                marginTop: '10px',
+                padding: '6px 14px',
+                borderRadius: '999px',
+                fontSize: '0.85rem',
+                fontWeight: 600,
+                background: `${tier.color}22`,
+                color: tier.color,
+                border: `1px solid ${tier.color}55`
+              }}
+            >
+              <span>{tier.emoji}</span>
+              <span>{tier.label}</span>
+            </span>
           </div>
         </div>
 
@@ -100,7 +120,7 @@ export default function SharedAchievementScreen({ stats, onTryYourself }) {
               </svg>
             </div>
             <div className="res-stat-body">
-              <span className="res-stat-label">WPM</span>
+              <span className="res-stat-label">⚡ WPM</span>
               <span className="res-stat-number">{wpm}</span>
               <span className="res-stat-hint">Words per minute</span>
             </div>
@@ -115,7 +135,7 @@ export default function SharedAchievementScreen({ stats, onTryYourself }) {
               </svg>
             </div>
             <div className="res-stat-body">
-              <span className="res-stat-label">Accuracy</span>
+              <span className="res-stat-label">🎯 Accuracy</span>
               <span className="res-stat-number">{accuracy}%</span>
             </div>
           </div>
@@ -129,7 +149,7 @@ export default function SharedAchievementScreen({ stats, onTryYourself }) {
               </svg>
             </div>
             <div className="res-stat-body">
-              <span className="res-stat-label">Errors</span>
+              <span className="res-stat-label">❌ Errors</span>
               <span className="res-stat-number">{errors}</span>
               <span className="res-stat-hint">Total mistakes</span>
             </div>
@@ -143,7 +163,7 @@ export default function SharedAchievementScreen({ stats, onTryYourself }) {
               </svg>
             </div>
             <div className="res-stat-body">
-              <span className="res-stat-label">Time Taken</span>
+              <span className="res-stat-label">⏱️ Time Taken</span>
               <span className="res-stat-number">{timeTaken}s</span>
               <span className="res-stat-hint">Test duration</span>
             </div>
@@ -152,7 +172,7 @@ export default function SharedAchievementScreen({ stats, onTryYourself }) {
 
         <div className="results-actions-bar">
           <button className="btn btn-primary" onClick={onTryYourself}>
-            <span>Try TypeAI Yourself →</span>
+            <span>🚀 Try TypeAI Yourself</span>
           </button>
         </div>
       </div>

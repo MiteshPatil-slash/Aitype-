@@ -125,7 +125,7 @@ export default function App() {
     }
 
     setActiveScreen(3);
-    showToast("Typing test completed! Results calculated.");
+    showToast("🎉 Typing test completed! Results calculated.");
   };
 
   // Connects frontend to Gemini AI backend: POST /api/analyze
@@ -158,17 +158,17 @@ export default function App() {
       if (data.success && data.analysis) {
         setAiAnalysis(data.analysis);
         setActiveScreen(4); // Navigate to AI Analysis Screen!
-        showToast("Gemini AI Analysis generated successfully!");
+        showToast("✨ Gemini AI Analysis generated successfully!");
       } else {
         const errorMsg = data.error || "AI analysis is temporarily unavailable.";
         setAiError(errorMsg);
-        showToast(errorMsg);
+        showToast(`⚠️ ${errorMsg}`);
       }
     } catch (err) {
       console.error("Network or API error:", err);
       const networkError = "AI analysis is temporarily unavailable. Check your network or server.";
       setAiError(networkError);
-      showToast(networkError);
+      showToast(`⚠️ ${networkError}`);
     } finally {
       setIsAnalyzing(false);
     }
@@ -178,7 +178,7 @@ export default function App() {
   const handleStartNextAiTest = (newParagraph) => {
     setCustomParagraph(newParagraph);
     setActiveScreen(2);
-    showToast("AI Generated Paragraph loaded into Typing Test!");
+    showToast("✨ AI Generated Paragraph loaded into Typing Test!");
   };
 
   const handleClearHistory = () => {
@@ -186,7 +186,7 @@ export default function App() {
     try {
       localStorage.removeItem('typeai_history');
     } catch {}
-    showToast("Typing history cleared.");
+    showToast("🗑️ Typing history cleared.");
   };
 
   return (

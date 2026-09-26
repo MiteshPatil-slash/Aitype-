@@ -32,3 +32,22 @@ export function buildShareUrl(stats) {
   url.searchParams.set('share', encoded);
   return url.toString();
 }
+
+// A fun, game-like rank for a WPM score — used to give the results and
+// share screens some personality instead of a plain number.
+const WPM_TIERS = [
+  { min: 0, emoji: '🐢', label: 'Just Getting Started', color: '#94a3b8' },
+  { min: 20, emoji: '🚶', label: 'Warming Up', color: '#60a5fa' },
+  { min: 40, emoji: '⚡', label: 'Solid Typer', color: '#34d399' },
+  { min: 60, emoji: '🔥', label: 'Fast Fingers', color: '#fb923c' },
+  { min: 80, emoji: '🚀', label: 'Speed Demon', color: '#a78bfa' },
+  { min: 100, emoji: '🏆', label: 'Typing Legend', color: '#f59e0b' }
+];
+
+export function getWpmTier(wpm = 0) {
+  let tier = WPM_TIERS[0];
+  for (const t of WPM_TIERS) {
+    if (wpm >= t.min) tier = t;
+  }
+  return tier;
+}
