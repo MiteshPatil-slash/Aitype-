@@ -42,9 +42,7 @@ export default function SharedAchievementScreen({ stats, onTryYourself }) {
   const timeTaken = stats.timeTaken ?? 60;
   const difficulty = stats.difficulty || 'Medium';
   const tier = getWpmTier(wpm);
-  const dateStr = stats.date
-    ? new Date(stats.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-    : null;
+  const dateStr = stats.dateLabel || null;
 
   return (
     <div className="screen-wrapper">

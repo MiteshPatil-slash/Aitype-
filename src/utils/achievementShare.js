@@ -11,7 +11,11 @@ export function encodeAchievement(stats = {}) {
     incorrectCount: stats.incorrectCount ?? 0,
     timeTaken: stats.timeTaken ?? stats.elapsedTime ?? 60,
     difficulty: stats.difficulty || 'Medium',
-    date: new Date().toISOString()
+    // A ready-to-display date string. When sharing a fresh result this is
+    // "now"; when sharing a past history entry, the caller passes that
+    // entry's own stored date label so the shared page reflects when the
+    // test actually happened, not when it was shared.
+    dateLabel: stats.dateLabel || new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
   };
   return btoa(JSON.stringify(payload));
 }
