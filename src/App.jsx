@@ -6,11 +6,28 @@ import AiAnalysisScreen from './components/AiAnalysisScreen.jsx';
 import AboutModal from './components/AboutModal.jsx';
 import DemoModal from './components/DemoModal.jsx';
 import HistoryModal from './components/HistoryModal.jsx';
+import SharedAchievementScreen from './components/SharedAchievementScreen.jsx';
+import { decodeAchievement } from './utils/achievementShare.js';
 
 export default function App() {
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('typeai_theme') || 'light';
   });
+
+  // If the URL has a ?share=... param, this is a shared achievement link —
+  // decode it once on load and show the read-only shared view instead of
+  // the normal app flow.
+  const [shareView, setShareView] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const encoded = params.get('share');
+    if (!encoded) return null;
+    return { stats: decodeAchievement(encoded) };
+  });
+
+  const exitShareView = () => {
+    window.history.replaceState({}, '', window.location.pathname);
+    setShareView(null);
+  };
 
   const [activeScreen, setActiveScreen] = useState(1);
   const [aboutOpen, setAboutOpen] = useState(false);
@@ -179,6 +196,13 @@ export default function App() {
 
       {/* Full Page Main Viewport */}
       <div className="app-page-wrapper">
+        {shareView ? (
+          <SharedAchievementScreen
+            stats={shareView.stats}
+            onTryYourself={exitShareView}
+          />
+        ) : (
+          <>
         {activeScreen === 1 && (
           <HomeScreen
             onNavigate={handleNavigate}
@@ -227,6 +251,8 @@ export default function App() {
             analysis={aiAnalysis}
             onStartNextTest={handleStartNextAiTest}
           />
+        )}
+          </>
         )}
       </div>
 

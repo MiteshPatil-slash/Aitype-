@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from './Navbar.jsx';
+import ShareAchievementModal from './ShareAchievementModal.jsx';
 
 export default function ResultsScreen({
   onNavigate,
@@ -21,6 +22,8 @@ export default function ResultsScreen({
   isAnalyzing = false,
   aiError = null
 }) {
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+
   const accuracyVal = stats.accuracy ?? 97;
   const incorrectVal = Math.max(0, 100 - accuracyVal);
   const wpmVal = stats.wpm ?? 72;
@@ -297,6 +300,19 @@ export default function ResultsScreen({
             </svg>
             <span>Back to Home</span>
           </button>
+          <button
+            className="btn btn-outline"
+            onClick={() => setShareModalOpen(true)}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="18" cy="5" r="3"/>
+              <circle cx="6" cy="12" r="3"/>
+              <circle cx="18" cy="19" r="3"/>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+            <span>Share Achievement</span>
+          </button>
         </div>
 
         {aiError && (
@@ -305,6 +321,12 @@ export default function ResultsScreen({
           </p>
         )}
       </div>
+
+      <ShareAchievementModal
+        isOpen={shareModalOpen}
+        onClose={() => setShareModalOpen(false)}
+        stats={stats}
+      />
     </div>
   );
 }
